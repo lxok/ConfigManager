@@ -217,6 +217,7 @@ public class ConfigManager {
                         }
                         PrimaryValue pri = new PrimaryValue();
                         pri.deserialize(b);
+                        pri.address = address;  //has not implemented serialize method
                         if (!pri.address().equals(address)) {
                             isPrimary = false;
                             running = false;

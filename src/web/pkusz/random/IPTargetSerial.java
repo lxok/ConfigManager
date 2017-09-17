@@ -1,7 +1,5 @@
 package web.pkusz.random;
 
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
 /**
  * Created by nick on 2017/9/14.
  */

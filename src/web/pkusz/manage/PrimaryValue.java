@@ -5,6 +5,8 @@ package web.pkusz.manage;
  */
 public class PrimaryValue implements Value{
 
+    String address;
+
     @Override
     public byte[] serialize() {
         return new byte[0];
@@ -14,6 +16,6 @@ public class PrimaryValue implements Value{
     public void deserialize(byte[] val) {}
 
     public String address() {
-        return "1";
+        return address;
     }
 }

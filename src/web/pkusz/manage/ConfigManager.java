@@ -5,6 +5,7 @@ import web.pkusz.data.DatabaseZK;
 import web.pkusz.random.IPTargetSerial;
 import web.pkusz.random.RandomGenerator;
 import web.pkusz.random.ScheduleTimeTargetSerial;
+import web.pkusz.serialize.SerializeUtil;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -149,6 +150,11 @@ public class ConfigManager {
         }
 
         if (running) {
+            String en = prop.getProperty("encrypt");
+            if (en != null && en.equals("true")) {
+                SerializeUtil.setEncrypt(db);
+            }
+            
             startService();
         }
     }

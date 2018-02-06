@@ -8,6 +8,7 @@ public class DefaultTargetSerial extends RandomTargetSerialHandler {
     public DefaultTargetSerial() {
         min = 0;
         max = 65535;
+        //max = (long)Math.pow(2, 20) - 1;
     }
 
     @Override

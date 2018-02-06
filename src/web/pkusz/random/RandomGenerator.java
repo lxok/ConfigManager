@@ -1,10 +1,10 @@
 package web.pkusz.random;
 
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by nick on 2017/7/16.
@@ -130,12 +130,24 @@ public class RandomGenerator {
         return b0 << 24 | b1 << 16 | b2 << 8 | b3;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         RandomGenerator r = new RandomGenerator();
-        List<String> res = r.getNext(200);
+        int flag = 32 * 1024;
+        FileOutputStream fo = new FileOutputStream("C:\\Users\\nick\\Desktop\\32k.txt");
+        PrintWriter pw = new PrintWriter(fo);
+        List<String> res = r.getNext(flag);
+        List<Integer> res2 = new ArrayList<>(flag);
         for (int i = 0; i < res.size(); i++) {
-            System.out.println(i + ":" + res.get(i));
+            res2.add(Integer.parseInt(res.get(i)));
         }
-        r.getNext(150);
+        Collections.sort(res2);
+        String line = "[" + 0 + " : " + res2.get(0) + "]";
+        pw.println(line);
+        for (int i = 1; i < res2.size(); i++) {
+            int a = res2.get(i - 1) + 1;
+            line =  "[" + a + " : " + res2.get(i) + "]";
+            pw.println(line);
+        }
+        pw.flush();
     }
 }

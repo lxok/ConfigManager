@@ -102,4 +102,57 @@ public class SerializeUtil {
         }
         return entries;
     }
+
+    public static List<Entry> parseCharArray(char[] c) {
+        List<Entry> entries = new ArrayList<>();
+        Entry e = null;
+        int i = 0;
+        boolean keyValueFlag = true;
+        while (i < c.length && c[i] != '\0') {
+            if (c[i] == '\"' || c[i] == ':' || c[i] == ',' || c[i] == '{' || c[i] == '}') {
+                i++;
+                continue;
+            }
+            int j = i++;
+            while (!(c[i] == '\"' || c[i] == ':' || c[i] == ',' || c[i] == '{' || c[i] == '}')) {
+                i++;
+            }
+            String str = String.valueOf(c, j, i - j);
+            if (keyValueFlag) {
+                e = new Entry();
+                e.key = str;
+                keyValueFlag = false;
+            } else {
+                e.value = str;
+                entries.add(e);
+                keyValueFlag = true;
+            }
+            i++;
+        }
+        return entries;
+    }
+
+    public static String getStringFromEntries(List<Entry> entries) {
+        if (entries.size() == 0) {
+            return null;
+        }
+        StringBuffer sb = new StringBuffer();
+        sb.append("{");
+        Iterator<Entry> i = entries.iterator();
+        while (i.hasNext()) {
+            Entry entry = i.next();
+            sb.append("\"");
+            sb.append(entry.key);
+            sb.append("\"");
+            sb.append(":");
+            sb.append("\"");
+            sb.append(entry.value);
+            sb.append("\"");
+            if (i.hasNext()) {
+                sb.append(",");
+            }
+        }
+        sb.append("}");
+        return sb.toString();
+    }
 }

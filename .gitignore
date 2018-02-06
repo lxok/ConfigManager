@@ -62,3 +62,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 /src/web/pkusz/serialize/Entry.java
+lib/
+out/
+src/web/pkusz/random/TestTargetSerial.java
+/src/web/pkusz/random/TestTargetSerial.java

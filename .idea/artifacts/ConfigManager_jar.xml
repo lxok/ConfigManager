@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ConfigManager:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ConfigManager_jar</output-path>
+    <root id="archive" name="ConfigManager.jar">
+      <element id="module-output" name="ConfigManager" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/netty-all-4.1.0.Final.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-api-1.7.21.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/zookeeper-3.4.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/log4j-1.2.17.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-log4j12-1.7.21.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

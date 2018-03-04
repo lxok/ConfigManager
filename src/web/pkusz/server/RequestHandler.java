@@ -19,6 +19,9 @@ public class RequestHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf in = (ByteBuf) msg;
         String v = in.toString(CharsetUtil.UTF_8);
+
+        System.out.println(v);
+
         List<Entry> en = SerializeUtil.parseCharArray(v.toCharArray());
         String respond = RequestProcessor.process(en);
         try {

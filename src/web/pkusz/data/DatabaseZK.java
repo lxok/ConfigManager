@@ -14,6 +14,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by nick on 2017/7/29.
  */
+/**
+ DatabaseZK类是CM服务器和CM节点对zk集群的数据操作类。
+ 包括路径键值的创建、更新、删除、查询等基本操作。
+ */
 public class DatabaseZK implements Database {
 
     private static final String ADDR = "addr";

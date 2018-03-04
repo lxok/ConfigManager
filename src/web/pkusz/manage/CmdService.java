@@ -7,6 +7,16 @@ import java.util.Scanner;
 /**
  * Created by nick on 2018/1/20.
  */
+/**
+ CmdService类用于处理CM用户在本地的命令行指令。
+ CM在启动后，将会在本地一个单独的线程中接收并处理用户指令，相应的指令处理逻辑在本类中完成。
+
+ 当前已完成的命令行指令包括（x表示某个节点id）：
+ server 或 server status：查询CM中的所有节点状态。
+ node x：查询某节点的当前状态。
+ node -h x：查询某节点的所有历史状态。
+ submit x 状态标志 调度距离当前间隔（毫秒）  其中，状态标志表示节点需要被调度的状态，距离当前间隔表示距当前提交任务多久后该调度任务被发起
+ */
 public class CmdService implements Runnable {
     static final String CMD_FORMOT_ERROR = "cmd format error";
 

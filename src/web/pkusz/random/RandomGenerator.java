@@ -1,13 +1,28 @@
 package web.pkusz.random;
 
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.security.MessageDigest;
 import java.util.*;
 
 /**
  * Created by nick on 2017/7/16.
+ */
+/**
+ RandomGenerator类是CM系统中的随机数发生器，负责产生随机数序列。
+ CM所属的存储系统对随机的要求比jdk类库中的随机数发生器要求更高，因此这里对jdk中的随机数发生器做了进一步封装和增加了其它逻辑。
+ 原生的随机数发生器在随机种子确定的情况下，会产生确定的数字序列。在本类中，将在一定期限内更换随机种子，能够有效避免对随机序列的
+ 预测。
+ RandomGenerator类考虑到了通常对于随机序列的使用会进行一定的结果封装，如需要获取ip值192.168.0.x，其中x为产生的随机数，这时当产
+ 生了随机数x后，需要有机制将随机数扩展为用户能够直接使用的序列，如将x拓展为192.168.0.x。因此，在该类中引入了目标序列转换框架，
+ 用户可以根据实际需求编写转换逻辑，需要新编写的类继承RandomTargetSerialHandler序列，并将其实例注册到随机数发生器中。
+
+ 在RandomGenerator类中，采用了策略模式对随机种子源和目标序列进行抽象，它们可以被用户拓展成需要的逻辑。随机种子源的接口为SeedSrcHandler,
+ 目标序列转换器的抽象接口为RandomTargetSerialHandler，在使用时，将拓展出的对象注册到随机数发生中，则随机数发生器会根据拓展类的
+ 逻辑获取种源和生成目标序列。
+ 将种子源拓展的目的是在随机数发生器中，种子决定了随机数发生器产生的确定随机序列，种子的不可预测性和随机性可以带来随机序列的不确
+ 定性变化，随机数发生器会在一定期限内更换种子，这样能够尽可能做到产生序列的随机性。默认种源实现类为DefaultSeedSrc。
+ 默认目标序列转换器的实现类为DefaultTargetSerial。
  */
 public class RandomGenerator {
     private static final int DEFAULT_SEED_SRC_NUM = 1;

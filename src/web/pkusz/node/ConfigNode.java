@@ -3,7 +3,6 @@ package web.pkusz.node;
 import web.pkusz.data.DatabaseZK;
 import web.pkusz.node.log.OpCommitLog;
 import web.pkusz.protocal.*;
-import web.pkusz.serialize.Entry;
 import web.pkusz.serialize.SerializeUtil;
 
 import java.io.*;
@@ -12,6 +11,33 @@ import java.util.Properties;
 
 /**
  * Created by nick on 2017/9/6.
+ */
+/**
+ ConfigNode类是CM节点的启动类，CM节点在本地启动后，将接收来自CM的调度指令，并在本地执行相应的操作，执行完毕后，将本次执行操作
+ 结果返回给CM。
+
+ CM的调度功能主要由与外部配置数据库zk的交互完成。对zk的基础数据操作由web.pkusz.data.DatabaseZK类完成。
+ 调度功能会在zk的/mimic/node/路径下创建每个调度节点的唯一路径，该路径的值就是当前的调度信息，CM通过该调度信息与被调度节点之间进行
+ 通信和调度。/mimic/node路径被分成两个部分，/mimic/node/persistent和/mimic/node/ephemeral两个节点创建路径，其中前者路径下创
+ 建的节点路径为永久路径，而后者路径下创建的路径为临时路径，前者中的节点路径的值记录某个节点的永久调度信息，后者的值记录某个节点
+ 的在线信息和当前状态信息。
+ CM节点程序由ConfigNode类完成，当一个CM节点启动后，首先会创建/mimic/node/ephemeral/x临时路径，x为该节点的id值，CM在周期性监控
+ 中发现该节点为新创建节点后，则会相应地创建/mimic/node/persistent/x永久节点。当CM发送调度指令给x节点时，则会在/mimic/node/persistent/x
+ 路径的值中写入当次调度内容，CM节点获取到该信息后，会在本地进行相应的执行操作，操作完成后，将执行结果更新到/mimic/node/ephemeral/x
+ 的值中，CM在获取到该执行结果后，会进行下一步对应操作。
+
+ CM的状态在web.pkusz.protocal.NodeState类中规定，包括如下几个状态：
+ READY = 0;
+ ACTION = 1;
+ SLEEPING = 2;
+ SHUTDOWN = 3;
+ WAITING = 4;
+ 这些状态位用于表示CM节点的当前状态或将要变更状态。
+
+ CM节点在执行过程中，可能会产生宕机情况，这样CM节点程序会中止，在这种情况下，CM只能获知该节点产生宕机，但无法获取该节点此次调度
+ 具体的执行情况。当CM节点被重新启动后，节点自身也无法判断上一次调度执行状况。为了解决这个问题，引入了本地调度日志功能，当节点在
+ 每次调度本地执行完毕后，都会将本次执行结果写入本地日志，日志被成功写入后，称本次调度被成功提交。只有提交完成的调度任务才会向CM
+ 反馈执行成功。当一个CM节点被重新启动后，会首先读取本地日志，获取上次本地调度情况，以使得节点能够顺利进行接下来的调度任务接收。
  */
 public class ConfigNode {
     public static final String VERSION = "1.0";
@@ -41,8 +67,7 @@ public class ConfigNode {
     private volatile boolean running = true;
     private volatile boolean dbInit = false;
 
-    public ConfigNode() {
-    }
+    public ConfigNode() {}
 
     public static void main(String[] args) throws Exception {
         ConfigNode cn = new ConfigNode();
@@ -339,10 +364,6 @@ public class ConfigNode {
                 }
             }
         }
-    }
-
-    private void changeLocalState(NodeConfig config) {
-        //use executor do local machine state operation
     }
 
     private void changeLocalIP(String ip) {

@@ -14,6 +14,15 @@ import java.util.List;
 /**
  * Created by nick on 2017/10/23.
  */
+/**
+ SerializeUtil工具类接口可以将可以将属性序列与字节序列之间相互转换。
+ 字节序列可以直接被写入zk路径下的值。
+ 每个Serialize对象的属性序列是由一串属性项组成而成的，属性项由Entry类实现，每个Entry类内部包含一个key和一个value,一般来说，当
+ 某个Serialize对象生成属性项序列时，key就是对象属性的名称，value为该对象属性对应的值。
+
+ 在SerializeUtil类中实现时，首先将一个属性项序列转换为一个JSON结构，再将该JSON格式的字符串使用utf-8编码生成字节序列。
+ 反之，可以将字节序列转换为属性项序列。
+ */
 public class SerializeUtil {
 
     private static boolean encrypt = false;

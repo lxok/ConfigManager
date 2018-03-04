@@ -9,6 +9,12 @@ import java.util.List;
 /**
  * Created by nick on 2018/1/6.
  */
+/**
+ NodePersConfig类是zk路径/mimic/node/persistent/路径下CM节点子路径的关联值。
+ NodePersConfig类实现了Serialize接口，表示它可以被序列化和反序列化。
+ 当CM服务器发现新的CM节点被注册后，会创建与节点id值对应的路径，该路径下的关联值被在系统执行时被抽象为该类。
+ Serialize接口使其对象状态转换为一个键值序列，再利用SerializeUtil工具可以实现字节序列到键值序列之间的转换。
+ */
 public class NodePersConfig implements Serialize {
 
     long opNum;

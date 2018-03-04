@@ -9,6 +9,18 @@ import java.util.Map;
 /**
  * Created by nick on 2017/12/3.
  */
+/**
+ RequestProcessor类是CM服务器的请求分发类。
+ 当请求到达server时，channel中的RequestHandler会将请求从utf-8解码后转发给RequestProcessor，之后Request将根据请求类型的不同来
+ 将请求进一步转发给对应的请求处理对象。
+
+ 在实现中，使用策略模式对请求处理逻辑进行抽象，请求处理逻辑类的基类为RequestProcessStrategy。
+ 不同请求类型对应的请求码在类中以静态变量的方式定义。
+ 除了正常的请求类型，错误请求类型，它们的请求码被定义为负值，也在类中被定义。
+ 为了减少请求对象的创建，类中使用了对象池管理不同的请求对象，当请求到达时，使用对象池中的对应处理对象来处理请求，而不是新建处理
+ 对象。
+ 对象池以及其中的请求处理对象都在RequestProcessor对象的构造函数中被创建。
+ */
 public class RequestProcessor {
 
     //singleton
@@ -40,6 +52,11 @@ public class RequestProcessor {
 
         processors.put(CONNECT_TEST, new ConnectTestStrategy());
         processors.put(X509_VERIFIED, new X509VerifiedStrategy());
+        processors.put(X509_ISSUE, null);
+        processors.put(X509_RENEW, null);
+        processors.put(X509_REVOKE, null);
+        processors.put(DATA_PUT, null);
+        processors.put(DATA_GET, null);
     }
 
     private String processRequest(List<Entry> entries) {
@@ -54,7 +71,7 @@ public class RequestProcessor {
             return errorProc.get(ERROR_ILLEGAL_CONNECT).process(entries);
         }
 
-        if (!processors.containsKey(type)) {
+        if (!processors.containsKey(type) || processors.get(type) == null) {
             errorProc.get(ERROR_REQUEST_TYPE).process(entries);
         }
 

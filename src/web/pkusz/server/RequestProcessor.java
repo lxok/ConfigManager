@@ -63,10 +63,9 @@ public class RequestProcessor {
         if (entries == null || entries.size() == 0) {
             return errorProc.get(ERROR_ILLEGAL_CONNECT).process(entries);
         }
-
         int type;
         try {
-            type = Integer.parseInt(entries.get(0).key);
+            type = Integer.parseInt(entries.get(0).value);
         } catch (Exception e) {
             return errorProc.get(ERROR_ILLEGAL_CONNECT).process(entries);
         }
@@ -74,7 +73,6 @@ public class RequestProcessor {
         if (!processors.containsKey(type) || processors.get(type) == null) {
             errorProc.get(ERROR_REQUEST_TYPE).process(entries);
         }
-
         return processors.get(type).process(entries);
     }
 }

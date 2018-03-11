@@ -134,6 +134,9 @@ public class ConfigNode {
         return true;
     }
 
+    /**
+     * CM节点程序入口
+     */
     public void start() throws Exception {
         if (!init()) {
             return;
@@ -167,6 +170,9 @@ public class ConfigNode {
         }
     }
 
+    /**
+     * 将CM节点状态转换为请求状态。
+     */
     private void transition(NodePersConfig nodePersConfig) {
         switch (nodePersConfig.getState()) {
             case NodeState.READY: //ready
@@ -189,6 +195,9 @@ public class ConfigNode {
 
     private void handleActionState() {}
 
+    /**
+     * Sleep状态执行逻辑，首先将本地网卡关闭，断开网络；一定时间后，重新开启网卡，重启网络。
+     */
     //cut network in a Specified time, then reconnect to the network.
     private void handleSleepingState(NodePersConfig nodePersConfig) {
         String intervalStr = nodePersConfig.getAttribute("interval");
@@ -304,6 +313,9 @@ public class ConfigNode {
         return "";
     }
 
+    /**
+     * 将命令在本地操作系统执行调用。
+     */
     private BufferedReader runLocal(String command) throws Exception {
         Process process = Runtime.getRuntime().exec(command);
         BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
@@ -318,6 +330,9 @@ public class ConfigNode {
         //to do
     }
 
+    /**
+     * CM节点状态转换完成处理，先将本次操作结果写入本地log，之后在zk上更新状态转换完成信息。
+     */
     //to do modify, replace zk`s computeIfAbsent
     private void completeTransition(NodePersConfig nodePathPValue) {
         opCommitLog.write(nodePathPValue.getOpNum(), nodePathPValue.getState());

@@ -21,7 +21,7 @@ import java.net.InetSocketAddress;
  不同请求处理对象的共有基类是RequestProcessStrategy，当需要扩展新的请求类型时，需要继承该类来实现请求处理逻辑。
  */
 public class ServerManager implements Runnable {
-    public static int DEFAULT_PORT = 10060;
+    public static int DEFAULT_PORT = 10086;
 
     int port;
 
@@ -34,7 +34,6 @@ public class ServerManager implements Runnable {
     }
 
     public void start() throws Exception {
-        final RequestHandler reqh = new RequestHandler();
         EventLoopGroup group = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
@@ -42,7 +41,7 @@ public class ServerManager implements Runnable {
                     childHandler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
-                            ch.pipeline().addLast(reqh);
+                            ch.pipeline().addLast(new RequestHandler());
                         }
                     });
             ChannelFuture f = b.bind().sync();

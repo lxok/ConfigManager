@@ -3,6 +3,7 @@ package web.pkusz.manage;
 import jdk.internal.util.xml.impl.ReaderUTF8;
 import web.pkusz.protocal.NodeEpheConfig;
 import web.pkusz.protocal.NodePersConfig;
+import web.pkusz.protocal.NodeType;
 import web.pkusz.serialize.Entry;
 import web.pkusz.serialize.Serialize;
 
@@ -18,6 +19,8 @@ import java.util.List;
  */
 public class Node implements Serialize {
 
+    private static NodeEpheConfig INIT_NODE_EPHE = new NodeEpheConfig();
+
     String id;
     String ip;
     String port;
@@ -32,6 +35,7 @@ public class Node implements Serialize {
         this.port = port;
         this.lastChangedTime = lastChangedTime;
         this.nodePersConfig = nodePersConfig;
+        this.nodeEpheConfig = INIT_NODE_EPHE;
         log = new NodeLog(id);
     }
 
@@ -45,6 +49,13 @@ public class Node implements Serialize {
 
     public NodeLog getNodeLog() {
         return log;
+    }
+
+    public int getType() {
+        if (nodeEpheConfig == null) {
+            return NodeType.UNKNOWN;
+        }
+        return nodeEpheConfig.getType();
     }
 
     public void log() {

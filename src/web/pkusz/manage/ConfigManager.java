@@ -209,7 +209,7 @@ public class ConfigManager {
     /**
      * CM服务器启动入口。
      */
-    private void start() throws Exception {
+    public void start() throws Exception {
         if (!init()) {
             return;
         }
@@ -496,7 +496,7 @@ public class ConfigManager {
             }
             Node node = nodesMap.get(nodeid);
             //verify the new task is not contains in scheduleQueue.
-            if (inScheduleQueue.contains(nodeid) || node.nodePersConfig.getOpNum() > node.nodePersConfig.getOpNum()) {
+            if (inScheduleQueue.contains(nodeid) || (node.nodeEpheConfig != null && node.nodePersConfig.getOpNum() > node.nodeEpheConfig.getCommitOpNum())) {
                 return false;
             }
             if (node.nodePersConfig.getState() == status) {

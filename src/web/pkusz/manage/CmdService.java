@@ -62,18 +62,19 @@ public class CmdService implements Runnable {
                     return;
                 }
                 List<List<Node>> lists = cm.getNodesStatus();
+                System.out.println("node_id|type|seq_num|state");
                 System.out.println("online nodes:");
                 Iterator<Node> iter = lists.get(0).iterator();
                 while (iter.hasNext()) {
                     Node node = iter.next();
-                    System.out.println(node.id + " " + node.nodeEpheConfig.getType() + " " + node.nodePersConfig.getOpNum() + " " + node.nodePersConfig.getState());
+                    System.out.println(node.id + " " + node.getType() + " " + node.nodePersConfig.getOpNum() + " " + node.nodePersConfig.getState());
                 }
 
                 System.out.println("offline nodes:");
                 iter = lists.get(1).iterator();
                 while (iter.hasNext()) {
                     Node node = iter.next();
-                    System.out.println(node.id + " " + node.nodeEpheConfig.getType() + " " + node.nodePersConfig.getOpNum() + " " + node.nodePersConfig.getState());
+                    System.out.println(node.id + " " + node.getType() + " " + node.nodePersConfig.getOpNum() + " " + node.nodePersConfig.getState());
                 }
             } else {
                 System.out.println(CMD_FORMOT_ERROR);
@@ -95,7 +96,8 @@ public class CmdService implements Runnable {
                 if (node == null) {
                     System.out.println("this node is not existed in system." + " " + cmd[1]);
                 } else {
-                    System.out.println(node.id + " " + node.nodeEpheConfig.getType() + " " + node.nodePersConfig.getOpNum() + " " + node.nodePersConfig.getState());
+                    System.out.println("node_id|type|seq_num|state");
+                    System.out.println(node.id + " " + node.getType() + " " + node.nodePersConfig.getOpNum() + " " + node.nodePersConfig.getState());
                 }
             }
         } else if (cmd[0].equals("submit")) {
